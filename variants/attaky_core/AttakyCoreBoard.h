@@ -31,4 +31,9 @@ public:
   // use as a MomentaryButton read provider. The AW9523 P0 byte is cached for a
   // few ms so a UI loop polling several buttons triggers only one I2C read.
   int buttonLevel(uint8_t btn_id);
+
+  // Battery voltage from the Power_Standard-Cell MAX17048 fuel gauge over the
+  // shared I2C bus. Returns 0 when no Power Cell module is in the stack (the
+  // ESP32Board default for "no battery"), since the Core has no ADC divider.
+  uint16_t getBattMilliVolts() override;
 };
