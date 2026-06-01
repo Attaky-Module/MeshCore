@@ -29,7 +29,7 @@ bool ST7789LCDDisplay::begin() {
     }
 
     // Im not sure if this is just a t-deck problem or not, if your display is slow try this.
-    #if defined(LILYGO_TDECK) || defined(HELTEC_LORA_V4_TFT)
+    #if defined(LILYGO_TDECK) || defined(HELTEC_LORA_V4_TFT) || defined(ATTAKY_CORE)
       displaySPI.begin(PIN_TFT_SCL, -1, PIN_TFT_SDA, PIN_TFT_CS);
     #endif
 
