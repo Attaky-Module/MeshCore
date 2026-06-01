@@ -21,8 +21,8 @@ void setup() {
   display.begin();
   Serial.println("display.begin() done");
 
-  const int w = display.width();   // logical units (128)
-  const int h = display.height();  // logical units (64)
+  const int w = display.width();  // logical units (128)
+  const int h = display.height(); // logical units (64)
 
   display.startFrame(DisplayDriver::DARK);
 
@@ -39,11 +39,11 @@ void setup() {
 
   // Colour corner blocks to confirm colour + orientation.
   display.setColor(DisplayDriver::RED);
-  display.fillRect(0, 0, 6, 6);          // top-left
+  display.fillRect(0, 0, 6, 6); // top-left
   display.setColor(DisplayDriver::GREEN);
-  display.fillRect(w - 6, 0, 6, 6);      // top-right
+  display.fillRect(w - 6, 0, 6, 6); // top-right
   display.setColor(DisplayDriver::BLUE);
-  display.fillRect(0, h - 6, 6, 6);      // bottom-left
+  display.fillRect(0, h - 6, 6, 6); // bottom-left
 
   display.endFrame();
   Serial.println("test pattern drawn");

@@ -14,15 +14,16 @@
 #endif
 
 #define MAX17048_I2C_ADDR  0x36
-#define MAX17048_REG_VCELL 0x02  // 16-bit, LSb = 78.125 uV/cell
-#define MAX17048_REG_SOC   0x04  // upper byte = 1%/LSb
+#define MAX17048_REG_VCELL 0x02 // 16-bit, LSb = 78.125 uV/cell
+#define MAX17048_REG_SOC   0x04 // upper byte = 1%/LSb
 
 static bool readReg16(uint8_t reg, uint16_t &out) {
   Wire.beginTransmission(MAX17048_I2C_ADDR);
   Wire.write(reg);
   if (Wire.endTransmission() != 0) return false;
   if (Wire.requestFrom((int)MAX17048_I2C_ADDR, 2) != 2) {
-    while (Wire.available()) Wire.read();  // drain any partial read
+    while (Wire.available())
+      Wire.read(); // drain any partial read
     return false;
   }
   out = ((uint16_t)Wire.read() << 8) | Wire.read();
@@ -45,7 +46,7 @@ void loop() {
   if (!readReg16(MAX17048_REG_VCELL, vcell)) {
     Serial.println("VCELL read failed (no Power Cell module on I2C 0x36?)");
   } else {
-    uint16_t mv = (uint16_t)(((uint32_t)vcell * 5) / 64);  // 78.125 uV/LSb
+    uint16_t mv = (uint16_t)(((uint32_t)vcell * 5) / 64); // 78.125 uV/LSb
     if (readReg16(MAX17048_REG_SOC, soc)) {
       Serial.printf("VCELL raw=%u mV=%u  SOC=%u%%\n", vcell, mv, soc >> 8);
     } else {

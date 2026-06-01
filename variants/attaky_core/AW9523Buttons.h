@@ -17,19 +17,18 @@
 // software reset and sets every button pin to INPUT to avoid this.
 //
 // Button bit map (P0 bit -> key), per Attaky Core host pinmap v0.9:
-#define ATTAKY_BTN_DOWN    0  // P0_0
-#define ATTAKY_BTN_LEFT    1  // P0_1
-#define ATTAKY_BTN_SELECT  2  // P0_2
-#define ATTAKY_BTN_RIGHT   3  // P0_3
-#define ATTAKY_BTN_UP      4  // P0_4
-#define ATTAKY_BTN_L1      5  // P0_5
-#define ATTAKY_BTN_R2      6  // P0_6
-#define ATTAKY_BTN_POWER   7  // P0_7
+#define ATTAKY_BTN_DOWN   0 // P0_0
+#define ATTAKY_BTN_LEFT   1 // P0_1
+#define ATTAKY_BTN_SELECT 2 // P0_2
+#define ATTAKY_BTN_RIGHT  3 // P0_3
+#define ATTAKY_BTN_UP     4 // P0_4
+#define ATTAKY_BTN_L1     5 // P0_5
+#define ATTAKY_BTN_R2     6 // P0_6
+#define ATTAKY_BTN_POWER  7 // P0_7
 
 class AW9523Buttons {
 public:
-  explicit AW9523Buttons(uint8_t addr = 0x59, TwoWire* wire = &Wire)
-    : _addr(addr), _wire(wire), _ok(false) {}
+  explicit AW9523Buttons(uint8_t addr = 0x59, TwoWire *wire = &Wire) : _addr(addr), _wire(wire), _ok(false) {}
 
   // Canonical AW9523 init. Wire.begin() must already have run.
   // Returns true if the chip ACKs on the bus.
@@ -42,10 +41,10 @@ public:
   bool isReady() const { return _ok; }
 
 private:
-  uint8_t  _addr;
-  TwoWire* _wire;
-  bool     _ok;
+  uint8_t _addr;
+  TwoWire *_wire;
+  bool _ok;
 
-  void    writeReg(uint8_t reg, uint8_t val);
+  void writeReg(uint8_t reg, uint8_t val);
   uint8_t readReg(uint8_t reg);
 };

@@ -6,9 +6,10 @@
 // NOTE: POWER is a hardware power toggle on long-press (handled by the PMIC,
 // not interceptable). Short-press it only during this test.
 
+#include "../AW9523Buttons.h"
+
 #include <Arduino.h>
 #include <Wire.h>
-#include "../AW9523Buttons.h"
 
 #ifndef PIN_BOARD_SDA
 #define PIN_BOARD_SDA 2
@@ -20,9 +21,7 @@
 static AW9523Buttons buttons(0x59);
 static uint8_t last_state = 0;
 
-static const char* BTN_NAMES[8] = {
-  "DOWN", "LEFT", "SELECT", "RIGHT", "UP", "L1", "R2", "POWER"
-};
+static const char *BTN_NAMES[8] = { "DOWN", "LEFT", "SELECT", "RIGHT", "UP", "L1", "R2", "POWER" };
 
 void setup() {
   Serial.begin(115200);

@@ -3,9 +3,9 @@
 // AW9523B register map (subset)
 #define AW9523_REG_INPUT_P0   0x00
 #define AW9523_REG_OUTPUT_P1  0x03
-#define AW9523_REG_CONFIG_P0  0x04  // direction: 0=output, 1=input
+#define AW9523_REG_CONFIG_P0  0x04 // direction: 0=output, 1=input
 #define AW9523_REG_CONFIG_P1  0x05
-#define AW9523_REG_LEDMODE_P0 0x12  // 1=GPIO, 0=LED constant-current
+#define AW9523_REG_LEDMODE_P0 0x12 // 1=GPIO, 0=LED constant-current
 #define AW9523_REG_LEDMODE_P1 0x13
 #define AW9523_REG_SOFT_RESET 0x7F
 
@@ -60,6 +60,6 @@ bool AW9523Buttons::begin() {
 uint8_t AW9523Buttons::readPressed() {
   if (!_ok) return 0;
   uint8_t raw = readReg(AW9523_REG_INPUT_P0);
-  if (raw == 0xFF) return 0;   // all-high = nothing pressed (or bus error)
-  return (uint8_t)~raw;        // active-low -> 1 = pressed
+  if (raw == 0xFF) return 0; // all-high = nothing pressed (or bus error)
+  return (uint8_t)~raw;      // active-low -> 1 = pressed
 }

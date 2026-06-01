@@ -1,3 +1,75 @@
+<div align="center">
+
+  <a href="https://attaky.com">
+    <img alt="Attaky" src="./.github/attaky-logo-horizontal.png" width="32%" />
+  </a>
+
+  <h2>MeshCore firmware for the Attaky Core</h2>
+
+  <p>
+    <img src="https://img.shields.io/badge/board-Attaky_Core-C0252B?style=flat-square" alt="Attaky Core" />
+    <a href="./license.txt"><img src="https://img.shields.io/badge/license-MIT-blue?style=flat-square" alt="License" /></a>
+    <a href="https://discord.attaky.com"><img src="https://img.shields.io/badge/Discord-attaky-5865F2?style=flat-square&logo=discord&logoColor=white" alt="Discord" /></a>
+  </p>
+
+  <a href="https://attaky.com">Attaky home</a>
+  &nbsp;·&nbsp;
+  <a href="https://discord.attaky.com">Discord</a>
+
+</div>
+
+> This repository is a fork of [MeshCore](https://github.com/meshcore-dev/MeshCore),
+> originally developed by Scott Powell / rippleradios.com, last modified by
+> Attaky on **2026-06-01** from upstream **v1.15.0**, to add support for the
+> **Attaky Core** handheld with its LoRa + GPS expansion. Inherits MeshCore's
+> **MIT** license.
+
+## Compatible devices
+
+The **Attaky Core** handheld with its LoRa + GPS expansion. As with upstream MeshCore, messaging is done from the phone or web app; the device runs the on-screen status UI and acts as a companion or repeater on the mesh.
+
+## What this fork adds on top of MeshCore
+
+- **`attaky_core` build target** — board definition + variant for the Attaky Core.
+- **LoRa radio** — configured for the Attaky Core's hardware, defaulting to the US/Canada region (the operating frequency is tunable at runtime from the app).
+- **On-device UI** — the color display plus D-pad navigation, with the face buttons mapped to enter / left / right / back.
+- **GPS** — location feeds into the companion.
+- **BLE and USB companion builds** — pair with the phone app over BLE, or the web app over USB serial.
+- **Battery level** — shown in the UI when the power module is attached.
+- **Bring-up self-tests** — separate builds for the buttons, display, GPS and battery.
+
+Upstream MeshCore features (protocol, mesh, routing, encryption, etc.) are unchanged.
+
+## Build & flash
+
+This is a fork — clone **this** repository (not the upstream `meshcore-dev/MeshCore`) to get the `attaky_core` build target.
+
+1. Clone this fork:
+   ```sh
+   git clone https://github.com/Attaky-Module/MeshCore.git
+   cd MeshCore
+   ```
+2. Install [PlatformIO](https://docs.platformio.org).
+3. Build an Attaky Core environment:
+   - `pio run -e attaky_core_companion_ble` — companion (status UI + D-pad), paired over BLE (phone app)
+   - `pio run -e attaky_core_companion_usb` — companion, paired over USB serial (web app)
+   - `pio run -e attaky_core_radio_headless` — repeater (radio + mesh only)
+4. Flash to a connected board:
+   ```sh
+   pio run -e attaky_core_companion_ble -t upload
+   ```
+
+Self-test builds (`attaky_core_buttontest` / `_displaytest` / `_gpstest` / `_batterytest`) are available for hardware bring-up.
+
+## Support
+
+- **Attaky Core / this fork** — Attaky [Discord](https://discord.attaky.com)
+- **MeshCore protocol / upstream firmware** — file at [`meshcore-dev/MeshCore`](https://github.com/meshcore-dev/MeshCore)
+
+---
+
+# ↓ Upstream MeshCore README ↓
+
 ## About MeshCore
 
 MeshCore is a lightweight, portable C++ library that enables multi-hop packet routing for embedded projects using LoRa and other packet radios. It is designed for developers who want to create resilient, decentralized communication networks that work without the internet.

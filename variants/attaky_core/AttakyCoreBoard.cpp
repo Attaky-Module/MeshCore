@@ -1,9 +1,10 @@
-#include <Arduino.h>
 #include "AttakyCoreBoard.h"
+
+#include <Arduino.h>
 
 // Power_Standard-Cell MAX17048G+T10 fuel gauge (shared I2C bus).
 #define MAX17048_I2C_ADDR  0x36
-#define MAX17048_REG_VCELL 0x02  // 16-bit, LSb = 78.125 uV/cell
+#define MAX17048_REG_VCELL 0x02 // 16-bit, LSb = 78.125 uV/cell
 
 void AttakyCoreBoard::begin() {
   // ESP32Board::begin() brings up the shared I2C bus via
@@ -22,7 +23,7 @@ void AttakyCoreBoard::begin() {
 int AttakyCoreBoard::buttonLevel(uint8_t btn_id) {
   unsigned long now = millis();
   if (now - _btn_cache_ms >= 8) {
-    _btn_cache = _buttons.readPressed();   // bit = 1 when pressed
+    _btn_cache = _buttons.readPressed(); // bit = 1 when pressed
     _btn_cache_ms = now;
   }
   // active-low: pressed -> LOW (matches a reverse=true MomentaryButton).
@@ -37,7 +38,8 @@ uint16_t AttakyCoreBoard::getBattMilliVolts() {
   Wire.write(MAX17048_REG_VCELL);
   if (Wire.endTransmission() != 0) return 0;
   if (Wire.requestFrom((int)MAX17048_I2C_ADDR, 2) != 2) {
-    while (Wire.available()) Wire.read();  // drain any partial read
+    while (Wire.available())
+      Wire.read(); // drain any partial read
     return 0;
   }
   uint16_t raw = ((uint16_t)Wire.read() << 8) | Wire.read();
