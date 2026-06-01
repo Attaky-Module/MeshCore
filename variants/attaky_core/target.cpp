@@ -16,7 +16,7 @@ ESP32RTCClock fallback_clock;
 AutoDiscoverRTCClock rtc_clock(fallback_clock);
 
 #if ENV_INCLUDE_GPS
-  // Expand_LoRa-GPS ATGM336H on Serial1 (host RX=IO18 <- GPS TXD, TX=IO17).
+  // Expand_LoRa-GPS ATGM336H on Serial1 (host RX=IO17 <- GPS TXD, TX=IO18).
   MicroNMEALocationProvider nmea(Serial1, &rtc_clock);
   EnvironmentSensorManager sensors(nmea);
 #else

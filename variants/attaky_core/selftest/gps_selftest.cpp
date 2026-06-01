@@ -5,15 +5,15 @@
 // arrives, the TX/RX mapping or the module is wrong.
 //
 // Uses MeshCore's pin convention: Serial1.setPins(PIN_GPS_TX, PIN_GPS_RX),
-// where setPins(rx, tx) makes PIN_GPS_TX the ESP RX pin (IO18 <- GPS TXD).
+// where setPins(rx, tx) makes PIN_GPS_TX the ESP RX pin (IO17 <- GPS TXD).
 
 #include <Arduino.h>
 
 #ifndef PIN_GPS_TX
-#define PIN_GPS_TX 18
+#define PIN_GPS_TX 17
 #endif
 #ifndef PIN_GPS_RX
-#define PIN_GPS_RX 17
+#define PIN_GPS_RX 18
 #endif
 #ifndef GPS_BAUD_RATE
 #define GPS_BAUD_RATE 9600
@@ -24,10 +24,10 @@ void setup() {
   delay(300);
   Serial.println();
   Serial.println("[Attaky Core] GPS UART self-test (raw NMEA echo)");
-  // Explicit pins in begin() (rx=PIN_GPS_TX=IO18 <- GPS TXD, tx=PIN_GPS_RX=IO17)
+  // Explicit pins in begin() (rx=PIN_GPS_TX=IO17 <- GPS TXD, tx=PIN_GPS_RX=IO18)
   // to rule out setPins-before-begin not sticking on ESP32-S3.
   Serial1.begin(GPS_BAUD_RATE, SERIAL_8N1, PIN_GPS_TX, PIN_GPS_RX);
-  Serial.println("Listening on IO18 for NMEA; expect $GxGGA/$GxRMC lines...");
+  Serial.println("Listening on IO17 for NMEA; expect $GxGGA/$GxRMC lines...");
 }
 
 void loop() {
