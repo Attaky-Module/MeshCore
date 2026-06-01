@@ -14,7 +14,14 @@ WRAPPER_CLASS radio_driver(radio, board);
 
 ESP32RTCClock fallback_clock;
 AutoDiscoverRTCClock rtc_clock(fallback_clock);
-SensorManager sensors;
+
+#if ENV_INCLUDE_GPS
+  // Expand_LoRa-GPS ATGM336H on Serial1 (host RX=IO18 <- GPS TXD, TX=IO17).
+  MicroNMEALocationProvider nmea(Serial1, &rtc_clock);
+  EnvironmentSensorManager sensors(nmea);
+#else
+  EnvironmentSensorManager sensors;
+#endif
 
 #ifdef DISPLAY_CLASS
   DISPLAY_CLASS display;
