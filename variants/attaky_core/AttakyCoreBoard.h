@@ -3,6 +3,7 @@
 #include <Wire.h>
 #include <Arduino.h>
 #include "helpers/ESP32Board.h"
+#include "AW9523Buttons.h"
 
 // Attaky Core (ESP32-S3-WROOM-1U-N16R8) main board.
 //
@@ -10,14 +11,24 @@
 // (@0x58 / @0x59), the QMI8658 IMU, the STK3311 ALS and the FT6636 touch IC.
 // Wire.begin(PIN_BOARD_SDA, PIN_BOARD_SCL) is handled by ESP32Board::begin().
 //
-// Batch 0/1: minimal board (radio only). Later batches add:
-//   - Batch 2: AW9523 @0x59 D-pad/button input + RGB LED
-//   - Batch 8: MAX17048 fuel-gauge battery reporting (Power_Standard-Cell)
+// The board owns the @0x59 button expander and exposes buttonLevel() so the
+// UI's MomentaryButton instances can be backed by the face buttons.
 class AttakyCoreBoard : public ESP32Board {
+  AW9523Buttons _buttons;
+  uint8_t       _btn_cache = 0;
+  unsigned long _btn_cache_ms = 0;
+
 public:
+  AttakyCoreBoard() : _buttons(0x59) {}
+
   void begin();
 
   const char* getManufacturerName() const override {
     return "Attaky Core";
   }
+
+  // Raw digital level (LOW = pressed, active-low) for an ATTAKY_BTN_* id, for
+  // use as a MomentaryButton read provider. The AW9523 P0 byte is cached for a
+  // few ms so a UI loop polling several buttons triggers only one I2C read.
+  int buttonLevel(uint8_t btn_id);
 };

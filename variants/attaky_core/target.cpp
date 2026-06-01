@@ -18,7 +18,17 @@ SensorManager sensors;
 
 #ifdef DISPLAY_CLASS
   DISPLAY_CLASS display;
-  MomentaryButton user_btn(PIN_USER_BTN, 1000, true);
+
+  // AW9523-backed read provider for the face buttons (active-low -> LOW=pressed).
+  static int attaky_btn_level(uint8_t btn_id) { return board.buttonLevel(btn_id); }
+
+  // UI_HAS_JOYSTICK nav mapping (consumed by UITask): user_btn -> KEY_ENTER,
+  // left -> KEY_LEFT, right -> KEY_RIGHT, back -> (triple) KEY_SELECT. Physical
+  // SELECT drives user_btn because HomeScreen actions are on KEY_ENTER.
+  MomentaryButton user_btn(ATTAKY_BTN_SELECT, 1000, true, false, false, attaky_btn_level);
+  MomentaryButton joystick_left(ATTAKY_BTN_LEFT, 1000, true, false, false, attaky_btn_level);
+  MomentaryButton joystick_right(ATTAKY_BTN_RIGHT, 1000, true, false, false, attaky_btn_level);
+  MomentaryButton back_btn(ATTAKY_BTN_L1, 1000, true, false, true, attaky_btn_level);
 #endif
 
 #ifndef LORA_CR

@@ -2,8 +2,9 @@
 
 #define MULTI_CLICK_WINDOW_MS  280
 
-MomentaryButton::MomentaryButton(int8_t pin, int long_press_millis, bool reverse, bool pulldownup, bool multiclick) { 
+MomentaryButton::MomentaryButton(int8_t pin, int long_press_millis, bool reverse, bool pulldownup, bool multiclick, MomentaryButtonReadFn read_fn) {
   _pin = pin;
+  _read_fn = read_fn;
   _reverse = reverse;
   _pull = pulldownup;
   down_at = 0; 
@@ -19,6 +20,7 @@ MomentaryButton::MomentaryButton(int8_t pin, int long_press_millis, bool reverse
 
 MomentaryButton::MomentaryButton(int8_t pin, int long_press_millis, int analog_threshold) {
   _pin = pin;
+  _read_fn = nullptr;
   _reverse = false;
   _pull = false;
   down_at = 0;
@@ -33,13 +35,14 @@ MomentaryButton::MomentaryButton(int8_t pin, int long_press_millis, int analog_t
 }
 
 void MomentaryButton::begin() {
-  if (_pin >= 0 && _threshold == 0) {
+  // Expander-backed buttons (_read_fn set) have no local GPIO to configure.
+  if (_pin >= 0 && _threshold == 0 && _read_fn == nullptr) {
     pinMode(_pin, _pull ? (_reverse ? INPUT_PULLUP : INPUT_PULLDOWN) : INPUT);
   }
 }
 
 bool  MomentaryButton::isPressed() const {
-  int btn = _threshold > 0 ? (analogRead(_pin) < _threshold) : digitalRead(_pin);
+  int btn = _read_fn ? _read_fn(_pin) : (_threshold > 0 ? (analogRead(_pin) < _threshold) : digitalRead(_pin));
   return isPressed(btn);
 }
 
@@ -66,7 +69,7 @@ int MomentaryButton::check(bool repeat_click) {
   if (_pin < 0) return BUTTON_EVENT_NONE;
 
   int event = BUTTON_EVENT_NONE;
-  int btn = _threshold > 0 ? (analogRead(_pin) < _threshold) : digitalRead(_pin);
+  int btn = _read_fn ? _read_fn(_pin) : (_threshold > 0 ? (analogRead(_pin) < _threshold) : digitalRead(_pin));
   if (btn != prev) {
     if (isPressed(btn)) {
       down_at = millis();

@@ -8,8 +8,14 @@
 #define BUTTON_EVENT_DOUBLE_CLICK 3
 #define BUTTON_EVENT_TRIPLE_CLICK 4
 
+// Optional read provider: returns the raw digital level (LOW/HIGH) for the
+// given id, used instead of digitalRead() so a button can be backed by an
+// off-chip source such as an I2C GPIO expander. NULL = read the GPIO pin.
+typedef int (*MomentaryButtonReadFn)(uint8_t id);
+
 class MomentaryButton {
   int8_t _pin;
+  MomentaryButtonReadFn _read_fn;
   int8_t prev, cancel;
   bool _reverse, _pull;
   int _long_millis;
@@ -23,7 +29,7 @@ class MomentaryButton {
   bool isPressed(int level) const;
 
 public:
-  MomentaryButton(int8_t pin, int long_press_mills=0, bool reverse=false, bool pulldownup=false, bool multiclick=true);
+  MomentaryButton(int8_t pin, int long_press_mills=0, bool reverse=false, bool pulldownup=false, bool multiclick=true, MomentaryButtonReadFn read_fn=nullptr);
   MomentaryButton(int8_t pin, int long_press_mills, int analog_threshold);
   void begin();
   int check(bool repeat_click=false);  // returns one of BUTTON_EVENT_*
