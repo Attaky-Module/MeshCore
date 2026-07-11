@@ -19,52 +19,51 @@
 </div>
 
 > This repository is a fork of [MeshCore](https://github.com/meshcore-dev/MeshCore),
-> originally developed by Scott Powell / rippleradios.com, last modified by
-> Attaky on **2026-06-01** from upstream **v1.15.0**, to add support for the
-> **Attaky Core** handheld with its LoRa + GPS expansion. Inherits MeshCore's
+> originally by Scott Powell / rippleradios.com. Attaky forked it from upstream
+> **v1.15.0** to add support for the **Attaky Core**, and it inherits MeshCore's
 > **MIT** license.
 
 ## Compatible devices
 
-The **Attaky Core** handheld with its LoRa + GPS expansion. As with upstream MeshCore, messaging is done from the phone or web app; the device runs the on-screen status UI and acts as a companion or repeater on the mesh.
+The **Attaky Core** handheld with its **LoRa + GPS expansion**. As with upstream MeshCore, messaging happens in the phone or web app; the device provides an on-screen status UI and runs as either a companion or a repeater.
 
 ## What this fork adds on top of MeshCore
 
-- **`attaky_core` build target** — board definition + variant for the Attaky Core.
-- **LoRa radio** — configured for the Attaky Core's hardware, defaulting to the US/Canada region (the operating frequency is tunable at runtime from the app).
-- **On-device UI** — the color display plus D-pad navigation, with the face buttons mapped to enter / left / right / back.
-- **GPS** — location feeds into the companion.
-- **BLE and USB companion builds** — pair with the phone app over BLE, or the web app over USB serial.
-- **Battery level** — shown in the UI when the power module is attached.
-- **Bring-up self-tests** — separate builds for the buttons, display, GPS and battery.
+- **Attaky Core board support** — adds the `attaky_core` board target and variant.
+- **Hardware-matched LoRa configuration** — defaults to the US/Canada region, while the operating frequency remains runtime-tunable from the app.
+- **Color status UI and controls** — supports D-pad-style navigation, mapping Select, Left, Right and L1 to enter, left, right and back.
+- **GPS in companion builds** — supplies location data to the companion firmware.
+- **BLE and USB companion transports** — connects to the phone app over BLE or to the web app over USB serial.
+- **Optional battery status** — shows the battery level when the power module is attached.
+- **Hardware bring-up self-tests** — provides separate builds for buttons, display, GPS and battery.
 
-Upstream MeshCore features (protocol, mesh, routing, encryption, etc.) are unchanged.
+Upstream MeshCore features—including the protocol, mesh, routing and encryption—are unchanged.
 
 ## Build & flash
 
-This is a fork — clone **this** repository (not the upstream `meshcore-dev/MeshCore`) to get the `attaky_core` build target.
+Clone **this fork** rather than upstream `meshcore-dev/MeshCore` to get the `attaky_core` target and environments.
 
-1. Clone this fork:
+1. Clone the fork:
    ```sh
    git clone https://github.com/Attaky-Module/MeshCore.git
    cd MeshCore
    ```
 2. Install [PlatformIO](https://docs.platformio.org).
-3. Build an Attaky Core environment:
-   - `pio run -e attaky_core_companion_ble` — companion (status UI + D-pad), paired over BLE (phone app)
-   - `pio run -e attaky_core_companion_usb` — companion, paired over USB serial (web app)
-   - `pio run -e attaky_core_radio_headless` — repeater (radio + mesh only)
-4. Flash to a connected board:
+3. Build the environment for the role you need:
+   - `pio run -e attaky_core_companion_ble` — color-display status UI and D-pad controls; companion connection to the phone app over BLE
+   - `pio run -e attaky_core_companion_usb` — color-display status UI and D-pad controls; companion connection to the web app over USB serial
+   - `pio run -e attaky_core_radio_headless` — headless repeater with radio and mesh only
+4. Flash a connected board by adding the upload target. For example:
    ```sh
    pio run -e attaky_core_companion_ble -t upload
    ```
 
-Self-test builds (`attaky_core_buttontest` / `_displaytest` / `_gpstest` / `_batterytest`) are available for hardware bring-up.
+For hardware bring-up, PlatformIO also provides `attaky_core_buttontest`, `attaky_core_displaytest`, `attaky_core_gpstest` and `attaky_core_batterytest`.
 
 ## Support
 
-- **Attaky Core / this fork** — Attaky [Discord](https://discord.attaky.com)
-- **MeshCore protocol / upstream firmware** — file at [`meshcore-dev/MeshCore`](https://github.com/meshcore-dev/MeshCore)
+- **Attaky Core / this fork** — join the Attaky [Discord](https://discord.attaky.com)
+- **MeshCore protocol / upstream firmware** — file an issue at [`meshcore-dev/MeshCore`](https://github.com/meshcore-dev/MeshCore/issues)
 
 ---
 
